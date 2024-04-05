@@ -1,0 +1,28 @@
+import requests
+
+# Bamboo server URL
+BAMBOO_URL = "https://your-bamboo-server.com"
+# Bamboo plan key
+PLAN_KEY = "YOUR_PLAN_KEY"
+# Bamboo personal access token
+PERSONAL_ACCESS_TOKEN = "YOUR_PERSONAL_ACCESS_TOKEN"
+
+# Construct the URL for triggering the plan
+url = f"{BAMBOO_URL}/rest/api/latest/queue/{PLAN_KEY}.json"
+
+# Set up request headers with personal access token
+headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+    "Authorization": f"Bearer {PERSONAL_ACCESS_TOKEN}"
+}
+
+try:
+    # Send POST request to trigger the plan
+    response = requests.post(url, headers=headers)
+    if response.status_code == 200:
+        print("Bamboo plan triggered successfully.")
+    else:
+        print(f"Failed to trigger Bamboo plan. Status code: {response.status_code}")
+except Exception as e:
+    print(f"An error occurred: {str(e)}")
