@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Directory to search within
+base_dir="."
+
+# Filename to look for
+target_file="your_filename.txt"
+
+# Find all directories in the base directory
+directories=$(ls -d $base_dir/*/)
+
+# Initialize an array to store directories containing the target file
+dirs_with_target_file=()
+
+# Loop through each directory
+for dir in $directories; do
+  # Check if the target file exists in the directory
+  if [ -f "$dir/$target_file" ]; then
+    dirs_with_target_file+=("$dir")
+  fi
+done
+
+# List directories containing the target file
+if [ ${#dirs_with_target_file[@]} -eq 0 ]; then
+  echo "No directories contain the file '$target_file'."
+else
+  echo "Directories containing the file '$target_file':"
+  for dir in "${dirs_with_target_file[@]}"; do
+    echo "$dir"
+  done
+fi
