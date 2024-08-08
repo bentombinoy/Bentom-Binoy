@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Find all directories in the current directory
+elements=$(find . -mindepth 1 -maxdepth 1 -type d)
+
+# Read the directories to remove into a variable
+dirs_to_remove=$(<dirs_to_remove.txt)
+
+# Convert the directories found by find and dirs_to_remove strings to newline-separated values
+elements=$(echo "$elements" | sed 's|^\./||')
+dirs_to_remove=$(echo "$dirs_to_remove" | tr ',' '\n')
+
+# Get the remaining directories by excluding those in dirs_to_remove
+remaining_dirs=$(echo "$elements" | grep -vxF -f <(echo "$dirs_to_remove"))
+
+# Get the removed directories by finding the intersection between elements and dirs_to_remove
+removed_dirs=$(echo "$elements" | grep -xF -f <(echo "$dirs_to_remove"))
+
+# Convert remaining and removed directories into arrays
+remaining_dirs_array=($remaining_dirs)
+removed_dirs_array=($removed_dirs)
+
+# Use a for loop to print the remaining directories
+echo "Remaining directories:"
+for dir in "${remaining_dirs_array[@]}"; do
+    echo "$dir"
+done
+
+# Use a for loop to print the removed directories
+echo "Removed directories:"
+for dir in "${removed_dirs_array[@]}"; do
+    echo "$dir"
+done
