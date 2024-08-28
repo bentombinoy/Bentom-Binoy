@@ -1,23 +1,42 @@
 #!/bin/bash
 
 # Default values
-WORK_DIR="$(pwd)"  # Default to the current directory
+WORK_DIR="$(pwd)"
 TOKEN=""
+COMPONENTS=""
 
-# Function to display usage
+# Function to display help/usage information
 usage() {
-  echo "Usage: $0 -b WORK_DIR -t TOKEN"
-  exit 1
+  echo "Usage: $0 -t TOKEN [-b WORK_DIR] [-c COMPONENTS]"
+  echo
+  echo "Options:"
+  echo "  -b WORK_DIR    Specify the working directory (default: current directory)."
+  echo "  -t TOKEN       Specify the authentication token (required)."
+  echo "  -c COMPONENTS  Specify components as a comma-separated list."
+  echo "  -h             Display this help message."
+  exit 0
 }
 
+# Check if no arguments are provided
+if [ $# -eq 0 ]; then
+  echo "No arguments provided."
+  usage
+fi
+
 # Parse command-line arguments
-while getopts ":b:t:" opt; do
+while getopts ":b:t:c:h" opt; do
   case $opt in
     b)
       WORK_DIR="$OPTARG"
       ;;
     t)
       TOKEN="$OPTARG"
+      ;;
+    c)
+      COMPONENTS="$OPTARG"
+      ;;
+    h)
+      usage
       ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
@@ -30,7 +49,7 @@ while getopts ":b:t:" opt; do
   esac
 done
 
-# Check if mandatory arguments are set
+# Check if the token argument is set
 if [ -z "$TOKEN" ]; then
   echo "Error: Token is required."
   usage
@@ -39,7 +58,8 @@ fi
 # Example action using the provided arguments
 echo "Working directory: $WORK_DIR"
 echo "Token: $TOKEN"
+echo "Components: $COMPONENTS"
 
-# Example usage of WORK_DIR and TOKEN
+# Example usage of WORK_DIR, TOKEN, and COMPONENTS
 # cd "$WORK_DIR"  # Change to the working directory
-# Use TOKEN for authentication or other purposes
+# Use TOKEN and COMPONENTS for further processing
