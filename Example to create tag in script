@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# Default values
+WORK_DIR="$(pwd)"  # Default to the current directory
+TOKEN=""
+
+# Function to display usage
+usage() {
+  echo "Usage: $0 -b WORK_DIR -t TOKEN"
+  exit 1
+}
+
+# Parse command-line arguments
+while getopts ":b:t:" opt; do
+  case $opt in
+    b)
+      WORK_DIR="$OPTARG"
+      ;;
+    t)
+      TOKEN="$OPTARG"
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      usage
+      ;;
+    :)
+      echo "Option -$OPTARG requires an argument." >&2
+      usage
+      ;;
+  esac
+done
+
+# Check if mandatory arguments are set
+if [ -z "$TOKEN" ]; then
+  echo "Error: Token is required."
+  usage
+fi
+
+# Example action using the provided arguments
+echo "Working directory: $WORK_DIR"
+echo "Token: $TOKEN"
+
+# Example usage of WORK_DIR and TOKEN
+# cd "$WORK_DIR"  # Change to the working directory
+# Use TOKEN for authentication or other purposes
